@@ -1,0 +1,145 @@
+.welcome-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.welcome-container {
+  background-color: var(--color-card-background);
+  border-radius: 20px;
+  padding: 2rem;
+  width: 90%;
+  max-width: 600px;
+  box-shadow: 0 10px 30px var(--shadow-color);
+  text-align: center;
+  overflow: hidden;
+}
+
+.welcome-cat-container {
+  height: 150px;
+  position: relative;
+  margin-bottom: 1rem;
+}
+
+.welcome-cat {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 120px;
+  height: 120px;
+}
+
+.welcome-cat .cat-ears {
+  position: absolute;
+  top: -20px;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  z-index: 1;
+}
+
+.welcome-cat .ear {
+  width: 0;
+  height: 0;
+  border-left: 20px solid transparent;
+  border-right: 20px solid transparent;
+  border-bottom: 35px solid var(--color-accent);
+  transform-origin: bottom center;
+}
+
+.welcome-cat .cat-face {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: var(--color-accent);
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.welcome-cat .cat-eyes {
+  display: flex;
+  justify-content: space-around;
+  width: 70%;
+  margin-bottom: 10px;
+}
+
+.welcome-cat .eye {
+  width: 15px;
+  height: 15px;
+  background-color: var(--color-text-inverse);
+  border-radius: 50%;
+  transform-origin: center;
+}
+
+.welcome-cat .cat-nose {
+  width: 10px;
+  height: 7px;
+  background-color: var(--color-text-inverse);
+  border-radius: 50%;
+  margin-bottom: 5px;
+}
+
+.welcome-cat .cat-mouth {
+  width: 30px;
+  height: 10px;
+  border-bottom: 3px solid var(--color-text-inverse);
+  border-radius: 50%;
+  transform-origin: center;
+}
+
+.welcome-text {
+  margin-bottom: 2rem;
+}
+
+.welcome-text h1 {
+  color: var(--color-text);
+  margin-bottom: 1rem;
+  font-size: 2rem;
+}
+
+.welcome-text p {
+  color: var(--color-text);
+  font-size: 1.1rem;
+  line-height: 1.5;
+  margin-bottom: 1.5rem;
+}
+
+.welcome-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .welcome-container {
+    padding: 1.5rem;
+  }
+  
+  .welcome-text h1 {
+    font-size: 1.8rem;
+  }
+  
+  .welcome-text p {
+    font-size: 1rem;
+  }
+  
+  .welcome-buttons {
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+  
+  .welcome-buttons button {
+    width: 100%;
+  }
+}

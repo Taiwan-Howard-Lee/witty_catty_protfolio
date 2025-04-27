@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { useLocation } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
 import './ChatWindow.css';
 
 interface Message {
@@ -19,12 +20,18 @@ interface Suggestion {
   text: string;
 }
 
-const ChatWindow = () => {
-  const [isOpen, setIsOpen] = useState(false);
+interface ChatWindowProps {
+  expanded?: boolean;
+}
+
+const ChatWindow = ({ expanded = false }: ChatWindowProps) => {
+  const [isOpen, setIsOpen] = useState(expanded);
   const [messages, setMessages] = useState<Message[]>([
     {
       id: '1',
-      content: 'Hello! I\'m Witty, your AI cat assistant. How can I help you today?',
+      content: expanded
+        ? 'Hello! I\'m Witty, your AI cat assistant. I\'ll be guiding you through this portfolio. Feel free to ask me anything!'
+        : 'Hello! I\'m Witty, your AI cat assistant. How can I help you today?',
       sender: 'ai',
       timestamp: new Date()
     }
@@ -236,51 +243,124 @@ const ChatWindow = () => {
   };
 
   return (
-    <div className="chat-container">
-      <button
-        className={`chat-toggle ${isOpen ? 'open' : ''} ${!isConnected && isOpen ? 'disconnected' : ''}`}
-        onClick={toggleChat}
-        aria-label="Toggle chat"
-      >
-        <div className="cat-icon">
-          {/* Simple cat icon */}
-          <div className="cat-ears">
-            <div className="ear left"></div>
-            <div className="ear right"></div>
-          </div>
-          <div className="cat-face">
-            <div className="cat-eyes">
-              <div className="eye left"></div>
-              <div className="eye right"></div>
+    <div className={`chat-container ${expanded ? 'expanded' : ''}`}>
+      {!expanded && (
+        <motion.button
+          className={`chat-toggle ${isOpen ? 'open' : ''} ${!isConnected && isOpen ? 'disconnected' : ''}`}
+          onClick={toggleChat}
+          aria-label="Toggle chat"
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+        >
+          <motion.div
+            className="cat-icon"
+            animate={{
+              rotate: isOpen ? [0, 0] : [0, 10, -10, 0],
+            }}
+            transition={{
+              repeat: isOpen ? 0 : Infinity,
+              repeatDelay: 5,
+              duration: 0.5,
+            }}
+          >
+            {/* Simple cat icon */}
+            <div className="cat-ears">
+              <motion.div
+                className="ear left"
+                animate={{
+                  rotate: [-5, 5, -5],
+                }}
+                transition={{
+                  repeat: Infinity,
+                  duration: 2,
+                  ease: "easeInOut"
+                }}
+              />
+              <motion.div
+                className="ear right"
+                animate={{
+                  rotate: [5, -5, 5],
+                }}
+                transition={{
+                  repeat: Infinity,
+                  duration: 2,
+                  ease: "easeInOut"
+                }}
+              />
             </div>
-            <div className="cat-nose"></div>
-            <div className="cat-mouth"></div>
-          </div>
-        </div>
-        {!isOpen && <span className="chat-label">Chat with Witty</span>}
-      </button>
-
-      {isOpen && (
-        <div className="chat-window">
-          <div className="chat-header">
-            <h3>
-              Witty AI Cat Assistant
-              {!isConnected && <span className="connection-status"> (Connecting...)</span>}
-            </h3>
-            <button
-              className="close-button"
-              onClick={toggleChat}
-              aria-label="Close chat"
-            >
-              &times;
-            </button>
-          </div>
-
-          {connectionError && (
-            <div className="connection-error">
-              {connectionError}
+            <div className="cat-face">
+              <div className="cat-eyes">
+                <motion.div
+                  className="eye left"
+                  animate={{
+                    scaleY: [1, 0.1, 1],
+                  }}
+                  transition={{
+                    repeat: Infinity,
+                    repeatDelay: 5,
+                    duration: 0.2,
+                  }}
+                />
+                <motion.div
+                  className="eye right"
+                  animate={{
+                    scaleY: [1, 0.1, 1],
+                  }}
+                  transition={{
+                    repeat: Infinity,
+                    repeatDelay: 5,
+                    duration: 0.2,
+                  }}
+                />
+              </div>
+              <div className="cat-nose" />
+              <motion.div
+                className="cat-mouth"
+                animate={{
+                  scaleX: [1, 1.2, 1],
+                }}
+                transition={{
+                  repeat: Infinity,
+                  duration: 2,
+                  ease: "easeInOut"
+                }}
+              />
             </div>
-          )}
+          </motion.div>
+          {!isOpen && <span className="chat-label">Chat with Witty</span>}
+        </motion.button>
+      )}
+
+      <AnimatePresence>
+        {(isOpen || expanded) && (
+          <motion.div
+            className={`chat-window ${expanded ? 'expanded' : ''}`}
+            initial={expanded ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.8 }}
+            transition={{ type: "spring", stiffness: 300, damping: 25 }}
+          >
+            <div className="chat-header">
+              <h3>
+                Witty AI Cat Assistant
+                {!isConnected && <span className="connection-status"> (Connecting...)</span>}
+              </h3>
+              {!expanded && (
+                <button
+                  className="close-button"
+                  onClick={toggleChat}
+                  aria-label="Close chat"
+                >
+                  &times;
+                </button>
+              )}
+            </div>
+
+            {connectionError && (
+              <div className="connection-error">
+                {connectionError}
+              </div>
+            )}
 
           <div className="chat-messages">
             {messages.map(message => (

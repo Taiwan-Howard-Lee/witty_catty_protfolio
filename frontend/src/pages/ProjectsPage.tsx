@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import { Layout } from '../components/Layout';
 import { ProjectCard } from '../components/Projects';
+import { motion } from 'framer-motion';
 import './ProjectsPage.css';
 
 // This is a temporary type until we connect to the backend
@@ -41,29 +41,36 @@ const ProjectsPage = () => {
   }, []);
 
   if (loading) {
-    return (
-      <Layout>
-        <div className="loading">Loading projects...</div>
-      </Layout>
-    );
+    return <div className="loading">Loading projects...</div>;
   }
 
   if (error) {
-    return (
-      <Layout>
-        <div className="error">{error}</div>
-      </Layout>
-    );
+    return <div className="error">{error}</div>;
   }
 
   return (
-    <Layout>
-      <div className="projects-page">
-        <h1>My Projects</h1>
-        <div className="projects-grid">
-          {projects.map((project) => (
+    <motion.div
+      className="projects-page"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+    >
+      <motion.h1
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
+        My Projects
+      </motion.h1>
+      <div className="projects-grid">
+        {projects.map((project, index) => (
+          <motion.div
+            key={project.id}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 * index, duration: 0.5 }}
+          >
             <ProjectCard
-              key={project.id}
               id={project.id}
               title={project.title}
               description={project.description}
@@ -71,10 +78,10 @@ const ProjectsPage = () => {
               live_link={project.live_link}
               repo_link={project.repo_link}
             />
-          ))}
-        </div>
+          </motion.div>
+        ))}
       </div>
-    </Layout>
+    </motion.div>
   );
 };
 
