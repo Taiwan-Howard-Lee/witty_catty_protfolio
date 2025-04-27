@@ -1,0 +1,132 @@
+.project-detail-page {
+  width: 100%;
+}
+
+.project-header {
+  margin-bottom: 2rem;
+}
+
+.back-link {
+  display: inline-block;
+  margin-bottom: 1rem;
+  color: #4cc9f0;
+  font-weight: 600;
+  transition: color 0.3s ease;
+}
+
+.back-link:hover {
+  color: #3ab7dc;
+}
+
+.project-header h1 {
+  font-size: 2.5rem;
+  color: #0f3460;
+  margin-bottom: 1rem;
+}
+
+.tech-stack {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.tech-tag {
+  background-color: #e6f7ff;
+  color: #0f3460;
+  padding: 0.3rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.project-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.project-description, .project-details, .code-snippets {
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 2rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.project-description h2, .project-details h2, .code-snippets h2 {
+  color: #0f3460;
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  font-size: 1.8rem;
+}
+
+.project-description p {
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
+  color: #333;
+}
+
+.project-links {
+  display: flex;
+  gap: 1rem;
+}
+
+.project-link {
+  display: inline-block;
+  padding: 0.6rem 1.2rem;
+  background-color: #4cc9f0;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 5px;
+  font-weight: 600;
+  transition: background-color 0.3s ease;
+}
+
+.project-link:hover {
+  background-color: #3ab7dc;
+}
+
+.content-text p {
+  margin-bottom: 1rem;
+  line-height: 1.6;
+  color: #333;
+}
+
+.content-text p:last-child {
+  margin-bottom: 0;
+}
+
+.code-snippet {
+  margin-bottom: 2rem;
+}
+
+.code-snippet:last-child {
+  margin-bottom: 0;
+}
+
+.code-snippet h3 {
+  color: #0f3460;
+  margin-bottom: 1rem;
+  font-size: 1.3rem;
+}
+
+.loading, .error {
+  text-align: center;
+  padding: 2rem;
+  font-size: 1.2rem;
+}
+
+.error {
+  color: #e63946;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .project-header h1 {
+    font-size: 2rem;
+  }
+  
+  .project-description, .project-details, .code-snippets {
+    padding: 1.5rem;
+  }
+}
