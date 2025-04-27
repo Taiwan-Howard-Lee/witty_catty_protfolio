@@ -43,11 +43,11 @@ export async function fetchApi(url: string, options: RequestInit = {}, retries =
     }
 
     return await response.json();
-  } catch (error) {
+  } catch (error: unknown) {
     console.error(`API fetch error for ${url}:`, error);
 
     // Retry logic for network errors or timeouts
-    if (retries > 0 && (error instanceof TypeError || error.name === 'AbortError')) {
+    if (retries > 0 && (error instanceof TypeError || (error instanceof Error && error.name === 'AbortError'))) {
       console.log(`Retrying fetch to ${url}, ${retries} retries left`);
       return fetchApi(url, options, retries - 1);
     }
@@ -59,16 +59,20 @@ export async function fetchApi(url: string, options: RequestInit = {}, retries =
 // Check if the backend is available
 export async function checkBackendHealth(): Promise<boolean> {
   try {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
+
     const response = await fetch(`${API_BASE_URL}/health`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
       },
-      timeout: 5000,
+      signal: controller.signal,
     });
 
+    clearTimeout(timeoutId);
     return response.ok;
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('Backend health check failed:', error);
     return false;
   }
