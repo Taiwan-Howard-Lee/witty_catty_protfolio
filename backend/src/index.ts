@@ -5,7 +5,8 @@ import { WebSocketServer } from 'ws';
 import http from 'http';
 import projectRoutes from './routes/projects';
 import chatRoutes from './routes/chat';
-import { generateAIResponse, generateProactiveSuggestions } from './services/ai';
+import testRoutes from './routes/test';
+import { generateSimpleResponse } from './services/simple-ai';
 
 // Load environment variables
 dotenv.config();
@@ -33,24 +34,18 @@ const wss = new WebSocketServer({ server });
 // Store WebSocket connections
 const clients = new Map();
 
-// Function to send proactive suggestions
-async function sendProactiveSuggestions(clientId: string) {
-  const client = clients.get(clientId);
-  if (!client || !client.context) return;
-
+// Function to send a simple welcome message
+function sendWelcomeMessage(ws: WebSocket) {
   try {
-    // Generate suggestions based on context
-    const suggestions = await generateProactiveSuggestions(client.context, client.history);
-
-    if (suggestions.length > 0) {
-      // Send suggestions to client
-      client.ws.send(JSON.stringify({
-        type: 'suggestion',
-        payload: { suggestions }
-      }));
-    }
+    // Send a welcome message
+    ws.send(JSON.stringify({
+      type: 'aiResponse',
+      payload: {
+        message: "Meow! I'm Witty, your AI cat assistant. How can I help you today? Feel free to ask me anything!"
+      }
+    }));
   } catch (error) {
-    console.error(`Error sending proactive suggestions to client ${clientId}:`, error);
+    console.error(`Error sending welcome message:`, error);
   }
 }
 
@@ -59,16 +54,17 @@ wss.on('connection', (ws) => {
   // Generate a unique ID for this connection
   const id = Date.now().toString();
 
-  // Store the connection
+  // Store the connection with simplified structure
   clients.set(id, {
     ws,
     id,
-    context: null,
-    history: [],
-    suggestionTimer: null
+    history: []
   });
 
   console.log(`Client connected (ID: ${id})`);
+
+  // Send welcome message
+  sendWelcomeMessage(ws);
 
   ws.on('message', async (message) => {
     try {
@@ -76,12 +72,6 @@ wss.on('connection', (ws) => {
       const parsedMessage = JSON.parse(message.toString());
 
       console.log(`Received message from client ${id}:`, parsedMessage);
-
-      // Clear any existing suggestion timer
-      if (client.suggestionTimer) {
-        clearTimeout(client.suggestionTimer);
-        client.suggestionTimer = null;
-      }
 
       // Handle different message types
       switch (parsedMessage.type) {
@@ -93,11 +83,10 @@ wss.on('connection', (ws) => {
           // Send typing indicator
           ws.send(JSON.stringify({ type: 'typing', payload: { isTyping: true } }));
 
-          // Generate AI response
-          const aiResponse = await generateAIResponse(
+          // Generate AI response using the simplified service
+          const aiResponse = await generateSimpleResponse(
             parsedMessage.payload.message,
-            client.history,
-            client.context
+            client.history
           );
 
           // Add AI response to history
@@ -118,24 +107,12 @@ wss.on('connection', (ws) => {
           // Stop typing indicator
           ws.send(JSON.stringify({ type: 'typing', payload: { isTyping: false } }));
 
-          // Set a timer to send proactive suggestions after a delay
-          client.suggestionTimer = setTimeout(() => {
-            sendProactiveSuggestions(id);
-          }, 10000); // 10 seconds after the last message
-
           break;
         }
 
         case 'contextUpdate': {
-          // Update context
-          client.context = parsedMessage.payload;
-          console.log(`Updated context for client ${id}:`, client.context);
-
-          // Send proactive suggestions after context update with a delay
-          client.suggestionTimer = setTimeout(() => {
-            sendProactiveSuggestions(id);
-          }, 5000); // 5 seconds after context update
-
+          // Just log the context update but don't use it for now
+          console.log(`Updated context for client ${id}:`, parsedMessage.payload);
           break;
         }
 
@@ -146,18 +123,12 @@ wss.on('connection', (ws) => {
       console.error('Error handling WebSocket message:', error);
       ws.send(JSON.stringify({
         type: 'error',
-        payload: { message: 'Error processing your request' }
+        payload: { message: `Error processing your request: ${error.message}` }
       }));
     }
   });
 
   ws.on('close', () => {
-    // Clear any timers
-    const client = clients.get(id);
-    if (client && client.suggestionTimer) {
-      clearTimeout(client.suggestionTimer);
-    }
-
     // Remove the connection
     clients.delete(id);
     console.log(`Client disconnected (ID: ${id})`);
@@ -167,6 +138,7 @@ wss.on('connection', (ws) => {
 // API Routes
 app.use('/api/projects', projectRoutes);
 app.use('/api/chat', chatRoutes);
+app.use('/api/test', testRoutes);
 
 // Basic route
 app.get('/', (req, res) => {
