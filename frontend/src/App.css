@@ -1,16 +1,20 @@
+/* Import color variables */
+@import './styles/colors.css';
+
 /* Reset and base styles */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  transition: background-color var(--transition-speed), color var(--transition-speed);
 }
 
 body {
   font-family: 'Inter', 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #f8f9fa;
-  color: #333;
+  background-color: var(--color-background);
+  color: var(--color-text);
   line-height: 1.5;
 }
 
@@ -22,16 +26,23 @@ body {
 
 a {
   text-decoration: none;
-  color: #4cc9f0;
+  color: var(--color-accent);
+  transition: color var(--transition-speed);
+}
+
+a:hover {
+  text-decoration: underline;
 }
 
 h1, h2, h3, h4, h5, h6 {
   font-weight: 700;
   line-height: 1.2;
+  color: var(--color-text);
 }
 
 button {
   cursor: pointer;
+  font-family: inherit;
 }
 
 /* Container */

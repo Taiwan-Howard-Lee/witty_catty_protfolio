@@ -1,0 +1,55 @@
+:root {
+  /* Light mode (default) */
+  --color-primary: #FFFFFF;
+  --color-secondary: #F8F7FF;
+  --color-accent: #FF6B6B;
+  
+  /* Text colors */
+  --color-text: #333333;
+  --color-text-light: #666666;
+  --color-text-inverse: #FFFFFF;
+  
+  /* Background colors */
+  --color-background: var(--color-primary);
+  --color-card-background: var(--color-secondary);
+  --color-header-footer: var(--color-secondary);
+  
+  /* Border colors */
+  --color-border: #EEEEEE;
+  
+  /* Additional semantic colors */
+  --color-success: #28a745;
+  --color-warning: #ffc107;
+  --color-danger: #dc3545;
+  --color-info: #17a2b8;
+  
+  /* Shadow */
+  --shadow-color: rgba(0, 0, 0, 0.1);
+  --shadow: 0 4px 6px var(--shadow-color);
+  
+  /* Transition for smooth theme switching */
+  --transition-speed: 0.3s;
+}
+
+body.dark-mode {
+  /* Dark mode */
+  --color-primary: #2A2D34;
+  --color-secondary: #3D3D3D;
+  --color-accent: #FFD166;
+  
+  /* Text colors */
+  --color-text: #FFFFFF;
+  --color-text-light: #CCCCCC;
+  --color-text-inverse: #333333;
+  
+  /* Background colors */
+  --color-background: var(--color-primary);
+  --color-card-background: var(--color-secondary);
+  --color-header-footer: #222222;
+  
+  /* Border colors */
+  --color-border: #444444;
+  
+  /* Shadow */
+  --shadow-color: rgba(0, 0, 0, 0.3);
+}

@@ -1,7 +1,8 @@
 .header {
-  background-color: #1a1a2e;
-  color: #fff;
+  background-color: var(--color-header-footer);
+  color: var(--color-text);
   padding: 1rem 0;
+  box-shadow: 0 2px 4px var(--shadow-color);
 }
 
 .container {
@@ -20,7 +21,7 @@
 }
 
 .logo a {
-  color: #fff;
+  color: var(--color-text);
   text-decoration: none;
 }
 
@@ -36,14 +37,36 @@
 }
 
 .nav a {
-  color: #fff;
+  color: var(--color-text);
   text-decoration: none;
   font-size: 1rem;
-  transition: color 0.3s ease;
+  transition: color var(--transition-speed);
 }
 
 .nav a:hover {
-  color: #4cc9f0;
+  color: var(--color-accent);
+  text-decoration: none;
+}
+
+/* Theme toggle button */
+.theme-toggle {
+  background: none;
+  border: none;
+  color: var(--color-text);
+  font-size: 1.2rem;
+  cursor: pointer;
+  margin-left: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  transition: background-color var(--transition-speed);
+}
+
+.theme-toggle:hover {
+  background-color: rgba(0, 0, 0, 0.1);
 }
 
 /* Responsive styles */
@@ -52,16 +75,16 @@
     flex-direction: column;
     align-items: flex-start;
   }
-  
+
   .nav {
     margin-top: 1rem;
     width: 100%;
   }
-  
+
   .nav ul {
     flex-direction: column;
   }
-  
+
   .nav li {
     margin-left: 0;
     margin-bottom: 0.5rem;
