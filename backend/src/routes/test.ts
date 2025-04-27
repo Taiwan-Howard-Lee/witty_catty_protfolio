@@ -8,11 +8,11 @@ router.get('/gemini', async (req, res) => {
   try {
     const result = await testGeminiConnection();
     res.json(result);
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error testing Gemini connection:', error);
     res.status(500).json({
       success: false,
-      message: `Error: ${error.message}`
+      message: `Error: ${error?.message || 'Unknown error'}`
     });
   }
 });
@@ -21,7 +21,7 @@ router.get('/gemini', async (req, res) => {
 router.post('/chat', async (req, res) => {
   try {
     const { message, history = [] } = req.body;
-    
+
     if (!message) {
       return res.status(400).json({
         success: false,
@@ -30,16 +30,16 @@ router.post('/chat', async (req, res) => {
     }
 
     const response = await generateSimpleResponse(message, history);
-    
+
     res.json({
       success: true,
       message: response
     });
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error generating chat response:', error);
     res.status(500).json({
       success: false,
-      message: `Error: ${error.message}`
+      message: `Error: ${error?.message || 'Unknown error'}`
     });
   }
 });

@@ -97,9 +97,9 @@ Be playful, curious, and occasionally mischievous - just like a real cat!
     const response = result.response;
     console.log('Received response from Gemini:', response.text());
     return response.text();
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error generating AI response:', error);
-    return `Meow! Sorry, I encountered an error while trying to answer your question. Error details: ${error.message}`;
+    return `Meow! Sorry, I encountered an error while trying to answer your question. Error details: ${error?.message || 'Unknown error'}`;
   }
 }
 
@@ -118,11 +118,11 @@ export async function testGeminiConnection(): Promise<{ success: boolean; messag
       success: true,
       message: `Connection successful. Response: ${result.response.text().substring(0, 100)}...`
     };
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error testing Gemini connection:', error);
     return {
       success: false,
-      message: `Connection failed: ${error.message}`
+      message: `Connection failed: ${error?.message || 'Unknown error'}`
     };
   }
 }

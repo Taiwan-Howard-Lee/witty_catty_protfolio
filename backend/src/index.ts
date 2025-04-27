@@ -1,12 +1,17 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import { WebSocketServer } from 'ws';
+import { WebSocketServer, WebSocket as WS } from 'ws';
 import http from 'http';
 import projectRoutes from './routes/projects';
 import chatRoutes from './routes/chat';
 import testRoutes from './routes/test';
 import { generateSimpleResponse } from './services/simple-ai';
+
+// Define a custom type that combines WebSocket properties we need
+type WebSocketExt = WS & {
+  reconnectAttempt?: number;
+};
 
 // Load environment variables
 dotenv.config();
@@ -45,7 +50,7 @@ const wss = new WebSocketServer({ server });
 const clients = new Map();
 
 // Function to send a simple welcome message
-function sendWelcomeMessage(ws: WebSocket) {
+function sendWelcomeMessage(ws: WebSocketExt) {
   try {
     // Send a welcome message
     ws.send(JSON.stringify({
@@ -54,13 +59,13 @@ function sendWelcomeMessage(ws: WebSocket) {
         message: "Meow! *stretches and purrs* I'm Witty, your AI cat assistant! I was just napping in a sunbeam, but I'm all ears now. How can I help you today? Feel free to ask me anything about this purrfect portfolio! *playfully paws at your cursor*"
       }
     }));
-  } catch (error) {
-    console.error(`Error sending welcome message:`, error);
+  } catch (error: any) {
+    console.error(`Error sending welcome message:`, error?.message || 'Unknown error');
   }
 }
 
 // WebSocket connection handler
-wss.on('connection', (ws) => {
+wss.on('connection', (ws: WebSocketExt) => {
   // Generate a unique ID for this connection
   const id = Date.now().toString();
 
@@ -129,11 +134,11 @@ wss.on('connection', (ws) => {
         default:
           console.warn(`Unknown message type: ${parsedMessage.type}`);
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error handling WebSocket message:', error);
       ws.send(JSON.stringify({
         type: 'error',
-        payload: { message: `Error processing your request: ${error.message}` }
+        payload: { message: `Error processing your request: ${error?.message || 'Unknown error'}` }
       }));
     }
   });
