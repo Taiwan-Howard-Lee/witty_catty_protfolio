@@ -1,14 +1,14 @@
 // API utility functions and constants
 
 // Base API URL based on environment
-export const API_BASE_URL = import.meta.env.PROD
-  ? 'https://witty-cat-portfolio-backend.onrender.com'
-  : 'http://localhost:3001';
+export const API_BASE_URL = import.meta.env.VITE_API_URL || (import.meta.env.PROD
+  ? 'https://witty-catty-protfolio-backend.onrender.com'
+  : 'http://localhost:3001');
 
 // WebSocket URL based on environment
-export const WS_BASE_URL = import.meta.env.PROD
-  ? 'wss://witty-cat-portfolio-backend.onrender.com'
-  : 'ws://localhost:3001';
+export const WS_BASE_URL = import.meta.env.VITE_WS_URL || (import.meta.env.PROD
+  ? 'wss://witty-catty-protfolio-backend.onrender.com'
+  : 'ws://localhost:3001');
 
 // For debugging - log the URLs being used
 console.log('API_BASE_URL:', API_BASE_URL);

@@ -106,7 +106,15 @@ const ChatWindow = ({ expanded = false }: ChatWindowProps) => {
     // Connection error
     ws.addEventListener('error', (error) => {
       console.error('WebSocket error:', error);
-      setConnectionError('Failed to connect to the server. Please try again later. You can try refreshing the page or check your internet connection.');
+      console.log('Current WebSocket URL:', WS_BASE_URL);
+      console.log('Environment variables:', {
+        PROD: import.meta.env.PROD,
+        DEV: import.meta.env.DEV,
+        VITE_API_URL: import.meta.env.VITE_API_URL,
+        VITE_WS_URL: import.meta.env.VITE_WS_URL
+      });
+
+      setConnectionError(`Failed to connect to the server at ${WS_BASE_URL}. Please try again later. You can try refreshing the page or check your internet connection.`);
     });
 
     // Listen for messages
