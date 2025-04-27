@@ -8,16 +8,43 @@ dotenv.config();
 const geminiApiKey = process.env.GEMINI_API_KEY;
 
 if (!geminiApiKey) {
-  throw new Error('Missing Gemini API key. Please check your .env file.');
+  console.error('Missing Gemini API key. Please check your .env file.');
+  // Don't throw here to allow the server to start, but the AI functionality won't work
 }
 
 // Initialize the Gemini API client
-const genAI = new GoogleGenerativeAI(geminiApiKey);
+let genAI: GoogleGenerativeAI;
+try {
+  genAI = new GoogleGenerativeAI(geminiApiKey || '');
+  console.log('Gemini API client initialized successfully');
+} catch (error) {
+  console.error('Failed to initialize Gemini API client:', error);
+  // Create a dummy client that will be replaced with proper error handling
+  genAI = {} as GoogleGenerativeAI;
+}
 
 // Get the text generation model - using the best available model for your API key
 // Note: We tested multiple models and found that only gemini-1.5-flash and gemini-1.5-pro work
 // gemini-1.5-pro is more capable than gemini-1.5-flash, so we'll use that
-const textModel = genAI.getGenerativeModel({ model: 'gemini-1.5-pro' });
+let textModel: any;
+try {
+  textModel = genAI.getGenerativeModel({ model: 'gemini-1.5-pro' });
+  console.log('Successfully initialized gemini-1.5-pro model');
+} catch (error) {
+  console.error('Failed to initialize gemini-1.5-pro model, will try fallback:', error);
+  try {
+    textModel = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+    console.log('Successfully initialized fallback gemini-1.5-flash model');
+  } catch (fallbackError) {
+    console.error('Failed to initialize fallback model:', fallbackError);
+    // Create a dummy model that will return an error message
+    textModel = {
+      generateContent: async () => ({
+        response: { text: () => 'AI service is currently unavailable. Please try again later.' }
+      })
+    };
+  }
+}
 
 // Simple function to generate AI response
 export async function generateSimpleResponse(

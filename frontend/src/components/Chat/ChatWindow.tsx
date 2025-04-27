@@ -51,22 +51,29 @@ const ChatWindow = ({ expanded = false }: ChatWindowProps) => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
-  // Setup WebSocket connection
+  // Setup WebSocket connection with exponential backoff
   const setupWebSocket = useCallback(() => {
     // Close existing connection if any
     if (wsRef.current) {
       wsRef.current.close();
     }
 
+    // Track reconnection attempts for exponential backoff
+    const reconnectAttempt = wsRef.current ? (wsRef.current as any).reconnectAttempt || 0 : 0;
+    const backoffTime = Math.min(30000, 1000 * Math.pow(1.5, reconnectAttempt)); // Max 30 seconds
+
     // Create new WebSocket connection
+    console.log(`Attempting to connect to WebSocket at ${WS_BASE_URL}`);
     const ws = new WebSocket(WS_BASE_URL);
     wsRef.current = ws;
+    (ws as any).reconnectAttempt = reconnectAttempt + 1;
 
     // Connection opened
     ws.addEventListener('open', () => {
       console.log('WebSocket connection established');
       setIsConnected(true);
       setConnectionError(null);
+      (ws as any).reconnectAttempt = 0; // Reset reconnect attempts on successful connection
 
       // Send current page context
       ws.send(JSON.stringify({
@@ -81,22 +88,25 @@ const ChatWindow = ({ expanded = false }: ChatWindowProps) => {
     });
 
     // Connection closed
-    ws.addEventListener('close', () => {
-      console.log('WebSocket connection closed');
+    ws.addEventListener('close', (event) => {
+      console.log(`WebSocket connection closed with code ${event.code}, reason: ${event.reason}`);
       setIsConnected(false);
 
-      // Try to reconnect after a delay
-      setTimeout(() => {
-        if (isOpen) {
-          setupWebSocket();
-        }
-      }, 3000);
+      // Try to reconnect after a delay with exponential backoff
+      if (isOpen) {
+        console.log(`Will attempt to reconnect in ${backoffTime}ms (attempt ${(ws as any).reconnectAttempt})`);
+        setTimeout(() => {
+          if (isOpen) {
+            setupWebSocket();
+          }
+        }, backoffTime);
+      }
     });
 
     // Connection error
     ws.addEventListener('error', (error) => {
       console.error('WebSocket error:', error);
-      setConnectionError('Failed to connect to the server. Please try again later.');
+      setConnectionError('Failed to connect to the server. Please try again later. You can try refreshing the page or check your internet connection.');
     });
 
     // Listen for messages
@@ -359,7 +369,16 @@ const ChatWindow = ({ expanded = false }: ChatWindowProps) => {
 
             {connectionError && (
               <div className="connection-error">
-                {connectionError}
+                <p>{connectionError}</p>
+                <button
+                  className="retry-button"
+                  onClick={() => {
+                    setConnectionError(null);
+                    setupWebSocket();
+                  }}
+                >
+                  Retry Connection
+                </button>
               </div>
             )}
 

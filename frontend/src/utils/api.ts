@@ -20,18 +20,56 @@ export const ENDPOINTS = {
   CHAT: `${API_BASE_URL}/api/chat`,
 };
 
-// Fetch wrapper with error handling
-export async function fetchApi(url: string, options: RequestInit = {}) {
+// Fetch wrapper with error handling and retry logic
+export async function fetchApi(url: string, options: RequestInit = {}, retries = 3) {
   try {
-    const response = await fetch(url, options);
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+
+    const response = await fetch(url, {
+      ...options,
+      signal: controller.signal,
+      headers: {
+        'Content-Type': 'application/json',
+        ...options.headers,
+      },
+    });
+
+    clearTimeout(timeoutId);
 
     if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
+      const errorText = await response.text();
+      throw new Error(`HTTP error! Status: ${response.status}, Message: ${errorText}`);
     }
 
     return await response.json();
   } catch (error) {
     console.error(`API fetch error for ${url}:`, error);
+
+    // Retry logic for network errors or timeouts
+    if (retries > 0 && (error instanceof TypeError || error.name === 'AbortError')) {
+      console.log(`Retrying fetch to ${url}, ${retries} retries left`);
+      return fetchApi(url, options, retries - 1);
+    }
+
     throw error;
+  }
+}
+
+// Check if the backend is available
+export async function checkBackendHealth(): Promise<boolean> {
+  try {
+    const response = await fetch(`${API_BASE_URL}/health`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      timeout: 5000,
+    });
+
+    return response.ok;
+  } catch (error) {
+    console.error('Backend health check failed:', error);
+    return false;
   }
 }

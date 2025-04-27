@@ -15,11 +15,21 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3001;
 
+// Parse allowed origins from environment variable or use defaults
+const getAllowedOrigins = (): string[] | string => {
+  if (process.env.NODE_ENV === 'production') {
+    const originsEnv = process.env.ALLOWED_ORIGINS;
+    if (originsEnv) {
+      return originsEnv.split(',').map(origin => origin.trim());
+    }
+    return ['https://witty-catty-protfolio-frontend.vercel.app', 'https://witty-cat-portfolio.vercel.app'];
+  }
+  return 'http://localhost:5173';
+};
+
 // Middleware
 app.use(cors({
-  origin: process.env.NODE_ENV === 'production'
-    ? ['https://witty-catty-protfolio-frontend.vercel.app', 'https://witty-cat-portfolio.vercel.app']
-    : 'http://localhost:5173',
+  origin: getAllowedOrigins(),
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true
 }));
@@ -143,6 +153,17 @@ app.use('/api/test', testRoutes);
 // Basic route
 app.get('/', (req, res) => {
   res.json({ message: 'Welcome to Witty Cat Portfolio API' });
+});
+
+// Health check endpoint
+app.get('/health', (req, res) => {
+  res.json({
+    status: 'ok',
+    timestamp: new Date().toISOString(),
+    uptime: process.uptime(),
+    environment: process.env.NODE_ENV || 'development',
+    version: process.env.npm_package_version || '1.0.0'
+  });
 });
 
 // Error handling middleware

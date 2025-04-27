@@ -8,7 +8,9 @@
     "build": "tsc",
     "start": "node dist/index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "monitor": "node scripts/check-usage.js"
+    "monitor": "node scripts/check-usage.js",
+    "postinstall": "npm run build",
+    "deploy": "bash scripts/build.sh"
   },
   "keywords": [
     "backend",
