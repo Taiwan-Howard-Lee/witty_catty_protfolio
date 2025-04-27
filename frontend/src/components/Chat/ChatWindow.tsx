@@ -362,13 +362,41 @@ const ChatWindow = ({ expanded = false }: ChatWindowProps) => {
               </div>
             )}
 
-          <div className="chat-messages">
-            {messages.map(message => (
-              <div
-                key={message.id}
-                className={`message ${message.sender === 'user' ? 'user' : 'ai'}`}
-              >
-                {message.sender === 'ai' && (
+            <div className="chat-messages">
+              {messages.map(message => (
+                <div
+                  key={message.id}
+                  className={`message ${message.sender === 'user' ? 'user' : 'ai'}`}
+                >
+                  {message.sender === 'ai' && (
+                    <div className="avatar">
+                      <div className="cat-icon small">
+                        <div className="cat-ears">
+                          <div className="ear left"></div>
+                          <div className="ear right"></div>
+                        </div>
+                        <div className="cat-face">
+                          <div className="cat-eyes">
+                            <div className="eye left"></div>
+                            <div className="eye right"></div>
+                          </div>
+                          <div className="cat-nose"></div>
+                          <div className="cat-mouth"></div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                  <div className="message-content">
+                    <p>{message.content}</p>
+                    <span className="timestamp">
+                      {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                    </span>
+                  </div>
+                </div>
+              ))}
+
+              {isTyping && (
+                <div className="message ai">
                   <div className="avatar">
                     <div className="cat-icon small">
                       <div className="cat-ears">
@@ -385,78 +413,51 @@ const ChatWindow = ({ expanded = false }: ChatWindowProps) => {
                       </div>
                     </div>
                   </div>
-                )}
-                <div className="message-content">
-                  <p>{message.content}</p>
-                  <span className="timestamp">
-                    {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                  </span>
+                  <div className="message-content">
+                    <div className="typing-indicator">
+                      <span></span>
+                      <span></span>
+                      <span></span>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            ))}
+              )}
 
-            {isTyping && (
-              <div className="message ai">
-                <div className="avatar">
-                  <div className="cat-icon small">
-                    <div className="cat-ears">
-                      <div className="ear left"></div>
-                      <div className="ear right"></div>
-                    </div>
-                    <div className="cat-face">
-                      <div className="cat-eyes">
-                        <div className="eye left"></div>
-                        <div className="eye right"></div>
-                      </div>
-                      <div className="cat-nose"></div>
-                      <div className="cat-mouth"></div>
-                    </div>
-                  </div>
-                </div>
-                <div className="message-content">
-                  <div className="typing-indicator">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                  </div>
-                </div>
+              <div ref={messagesEndRef} />
+            </div>
+
+            {suggestions.length > 0 && (
+              <div className="suggestions">
+                {suggestions.map(suggestion => (
+                  <button
+                    key={suggestion.id}
+                    className="suggestion-button"
+                    onClick={() => handleSuggestionClick(suggestion.text)}
+                  >
+                    {suggestion.text}
+                  </button>
+                ))}
               </div>
             )}
 
-            <div ref={messagesEndRef} />
-          </div>
-
-          {suggestions.length > 0 && (
-            <div className="suggestions">
-              {suggestions.map(suggestion => (
-                <button
-                  key={suggestion.id}
-                  className="suggestion-button"
-                  onClick={() => handleSuggestionClick(suggestion.text)}
-                >
-                  {suggestion.text}
-                </button>
-              ))}
-            </div>
-          )}
-
-          <form className="chat-input" onSubmit={handleSubmit}>
-            <input
-              type="text"
-              value={inputValue}
-              onChange={handleInputChange}
-              placeholder={isConnected ? "Type your message..." : "Connecting to server..."}
-              disabled={isTyping || !isConnected}
-            />
-            <button
-              type="submit"
-              disabled={!inputValue.trim() || isTyping || !isConnected}
-            >
-              Send
-            </button>
-          </form>
-        </div>
-      )}
+            <form className="chat-input" onSubmit={handleSubmit}>
+              <input
+                type="text"
+                value={inputValue}
+                onChange={handleInputChange}
+                placeholder={isConnected ? "Type your message..." : "Connecting to server..."}
+                disabled={isTyping || !isConnected}
+              />
+              <button
+                type="submit"
+                disabled={!inputValue.trim() || isTyping || !isConnected}
+              >
+                Send
+              </button>
+            </form>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
