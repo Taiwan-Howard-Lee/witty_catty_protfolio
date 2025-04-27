@@ -14,8 +14,8 @@ if (!geminiApiKey) {
 // Initialize the Gemini API client
 const genAI = new GoogleGenerativeAI(geminiApiKey);
 
-// Get the text generation model - using the model you specified
-const textModel = genAI.getGenerativeModel({ model: 'gemini-2.5-flash-preview-04-17' });
+// Get the text generation model - using a model that works with your API key
+const textModel = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
 
 // Simple function to generate AI response
 export async function generateSimpleResponse(
@@ -24,7 +24,7 @@ export async function generateSimpleResponse(
 ): Promise<string> {
   try {
     console.log('Generating response for query:', userQuery);
-    
+
     // Construct a simple prompt
     const systemPrompt = `
 You are a witty black cat AI assistant named "Witty" for a developer portfolio website.
@@ -42,7 +42,7 @@ Keep responses concise but informative.
     ];
 
     // Add the current user query if it's not already in the history
-    if (conversationHistory.length === 0 || 
+    if (conversationHistory.length === 0 ||
         conversationHistory[conversationHistory.length - 1].role !== 'user' ||
         conversationHistory[conversationHistory.length - 1].content !== userQuery) {
       chatHistory.push({
