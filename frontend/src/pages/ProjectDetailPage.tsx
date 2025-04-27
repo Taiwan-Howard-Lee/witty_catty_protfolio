@@ -60,7 +60,8 @@ const ProjectDetailPage = () => {
   }
 
   return (
-    <div className="project-detail-page">
+    <Layout>
+      <div className="project-detail-page">
         <div className="project-header">
           <Link to="/projects" className="back-link">
             &larr; Back to Projects
@@ -134,7 +135,7 @@ const ProjectDetailPage = () => {
           )}
         </div>
       </div>
-    </div>
+    </Layout>
   );
 };
 
