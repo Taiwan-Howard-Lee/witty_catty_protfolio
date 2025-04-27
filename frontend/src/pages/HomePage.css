@@ -3,11 +3,12 @@
 }
 
 .hero {
-  background-color: #0f3460;
-  color: #fff;
+  background-color: var(--color-secondary);
+  color: var(--color-text);
   padding: 4rem 0;
   border-radius: 10px;
   margin-bottom: 3rem;
+  box-shadow: 0 4px 15px var(--shadow-color);
 }
 
 .hero-content {
@@ -20,12 +21,14 @@
 .hero h1 {
   font-size: 2.5rem;
   margin-bottom: 1rem;
+  color: var(--color-text);
 }
 
 .hero p {
   font-size: 1.2rem;
   margin-bottom: 2rem;
   line-height: 1.6;
+  color: var(--color-text);
 }
 
 .hero-buttons {
@@ -40,36 +43,43 @@
   border-radius: 5px;
   text-decoration: none;
   font-weight: 600;
-  transition: all 0.3s ease;
+  transition: all var(--transition-speed) ease;
 }
 
 .btn-primary {
-  background-color: #4cc9f0;
-  color: #1a1a2e;
+  background-color: var(--color-accent);
+  color: var(--color-text-inverse);
+  border: none;
 }
 
 .btn-primary:hover {
-  background-color: #3ab7dc;
+  filter: brightness(90%);
+  text-decoration: none;
 }
 
 .btn-secondary {
   background-color: transparent;
-  color: #fff;
-  border: 2px solid #fff;
+  color: var(--color-text);
+  border: 2px solid var(--color-text);
 }
 
 .btn-secondary:hover {
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: var(--color-accent);
+  border-color: var(--color-accent);
+  color: var(--color-text-inverse);
+  text-decoration: none;
 }
 
 .btn-outline {
   background-color: transparent;
-  color: #0f3460;
-  border: 2px solid #0f3460;
+  color: var(--color-text);
+  border: 2px solid var(--color-accent);
 }
 
 .btn-outline:hover {
-  background-color: rgba(15, 52, 96, 0.1);
+  background-color: var(--color-accent);
+  color: var(--color-text-inverse);
+  text-decoration: none;
 }
 
 .featured-projects {
@@ -80,7 +90,7 @@
   text-align: center;
   margin-bottom: 2rem;
   font-size: 2rem;
-  color: #0f3460;
+  color: var(--color-text);
 }
 
 .project-cards {
@@ -99,7 +109,7 @@
   text-align: center;
   padding: 2rem;
   font-size: 1.2rem;
-  color: #666;
+  color: var(--color-text-light);
 }
 
 /* Responsive styles */
