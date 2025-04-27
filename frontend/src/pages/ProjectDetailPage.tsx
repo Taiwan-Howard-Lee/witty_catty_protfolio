@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { Layout } from '../components/Layout';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import { API_BASE_URL, fetchApi } from '../utils/api';
 import './ProjectDetailPage.css';
 
 // This is a temporary type until we connect to the backend
@@ -30,13 +31,7 @@ const ProjectDetailPage = () => {
   useEffect(() => {
     const fetchProject = async () => {
       try {
-        const response = await fetch(`http://localhost:3001/api/projects/${id}`);
-
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-
-        const data = await response.json();
+        const data = await fetchApi(`${API_BASE_URL}/api/projects/${id}`);
         setProject(data);
         setLoading(false);
       } catch (err) {
@@ -50,27 +45,22 @@ const ProjectDetailPage = () => {
   }, [id]);
 
   if (loading) {
-    return (
-      <Layout>
-        <div className="loading">Loading project details...</div>
-      </Layout>
-    );
+    return <div className="loading">Loading project details...</div>;
   }
 
   if (error || !project) {
     return (
-      <Layout>
+      <div className="error-container">
         <div className="error">{error || 'Project not found'}</div>
         <Link to="/projects" className="back-link">
           Back to Projects
         </Link>
-      </Layout>
+      </div>
     );
   }
 
   return (
-    <Layout>
-      <div className="project-detail-page">
+    <div className="project-detail-page">
         <div className="project-header">
           <Link to="/projects" className="back-link">
             &larr; Back to Projects
@@ -144,7 +134,7 @@ const ProjectDetailPage = () => {
           )}
         </div>
       </div>
-    </Layout>
+    </div>
   );
 };
 

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { ProjectCard } from '../components/Projects';
 import { motion } from 'framer-motion';
+import { ENDPOINTS, fetchApi } from '../utils/api';
 import './ProjectsPage.css';
 
 // This is a temporary type until we connect to the backend
@@ -21,13 +22,7 @@ const ProjectsPage = () => {
   useEffect(() => {
     const fetchProjects = async () => {
       try {
-        const response = await fetch('http://localhost:3001/api/projects');
-
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-
-        const data = await response.json();
+        const data = await fetchApi(ENDPOINTS.PROJECTS);
         setProjects(data);
         setLoading(false);
       } catch (err) {

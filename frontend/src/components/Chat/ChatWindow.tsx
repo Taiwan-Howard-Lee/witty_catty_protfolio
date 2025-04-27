@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
+import { WS_BASE_URL } from '../../utils/api';
 import './ChatWindow.css';
 
 interface Message {
@@ -58,7 +59,7 @@ const ChatWindow = ({ expanded = false }: ChatWindowProps) => {
     }
 
     // Create new WebSocket connection
-    const ws = new WebSocket('ws://localhost:3001');
+    const ws = new WebSocket(WS_BASE_URL);
     wsRef.current = ws;
 
     // Connection opened

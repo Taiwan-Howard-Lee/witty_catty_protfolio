@@ -4,6 +4,7 @@ import { Layout, SplitLayout } from '../components/Layout';
 import { ProjectCard } from '../components/Projects';
 import { WelcomeScreen } from '../components/Welcome';
 import { motion, AnimatePresence } from 'framer-motion';
+import { ENDPOINTS, fetchApi } from '../utils/api';
 import './HomePage.css';
 
 // This is a temporary type until we connect to the backend
@@ -39,13 +40,7 @@ const HomePage = () => {
       try {
         // For now, we'll just use the regular projects endpoint
         // In the future, we could create a dedicated featured projects endpoint
-        const response = await fetch('http://localhost:3001/api/projects');
-
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-
-        const data = await response.json();
+        const data = await fetchApi(ENDPOINTS.PROJECTS);
 
         // For now, just use all projects as featured projects
         // In a real app, you might have a "featured" flag in the database
