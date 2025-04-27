@@ -1,55 +1,81 @@
 :root {
-  /* Light mode (default) */
+  /* Light mode (default) - Playful Cat Theme */
+  /* Primary (60%) - White with slight lavender tint */
   --color-primary: #FFFFFF;
-  --color-secondary: #F8F7FF;
+  --color-primary-100: #F8F7FF;
+  --color-primary-200: #F0EEFF;
+
+  /* Secondary (30%) - Lavender shades */
+  --color-secondary: #E6E6FA;
+  --color-secondary-100: #D8D8FF;
+  --color-secondary-200: #C5C5F3;
+
+  /* Accent (10%) - Coral shades */
   --color-accent: #FF6B6B;
-  
+  --color-accent-100: #FF8585;
+  --color-accent-200: #FF4F4F;
+
   /* Text colors */
   --color-text: #333333;
   --color-text-light: #666666;
   --color-text-inverse: #FFFFFF;
-  
+
   /* Background colors */
   --color-background: var(--color-primary);
-  --color-card-background: var(--color-secondary);
+  --color-card-background: var(--color-primary-100);
   --color-header-footer: var(--color-secondary);
-  
+
   /* Border colors */
   --color-border: #EEEEEE;
-  
+
   /* Additional semantic colors */
   --color-success: #28a745;
   --color-warning: #ffc107;
   --color-danger: #dc3545;
   --color-info: #17a2b8;
-  
+
   /* Shadow */
   --shadow-color: rgba(0, 0, 0, 0.1);
   --shadow: 0 4px 6px var(--shadow-color);
-  
+  --shadow-hover: 0 8px 15px var(--shadow-color);
+
   /* Transition for smooth theme switching */
   --transition-speed: 0.3s;
+  --transition-bounce: cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 body.dark-mode {
-  /* Dark mode */
+  /* Dark mode - Playful Cat Theme */
+  /* Primary (60%) - Charcoal shades */
   --color-primary: #2A2D34;
+  --color-primary-100: #353941;
+  --color-primary-200: #22252B;
+
+  /* Secondary (30%) - Dark gray shades */
   --color-secondary: #3D3D3D;
+  --color-secondary-100: #4A4A4A;
+  --color-secondary-200: #303030;
+
+  /* Accent (10%) - Golden yellow shades */
   --color-accent: #FFD166;
-  
+  --color-accent-100: #FFDA85;
+  --color-accent-200: #FFC233;
+
   /* Text colors */
   --color-text: #FFFFFF;
   --color-text-light: #CCCCCC;
   --color-text-inverse: #333333;
-  
+
   /* Background colors */
   --color-background: var(--color-primary);
-  --color-card-background: var(--color-secondary);
-  --color-header-footer: #222222;
-  
+  --color-card-background: var(--color-primary-100);
+  --color-header-footer: var(--color-primary-200);
+
   /* Border colors */
   --color-border: #444444;
-  
+
   /* Shadow */
   --shadow-color: rgba(0, 0, 0, 0.3);
+  --shadow: 0 4px 6px var(--shadow-color);
+  --shadow-hover: 0 8px 15px var(--shadow-color);
 }
