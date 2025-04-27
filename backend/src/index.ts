@@ -41,7 +41,7 @@ function sendWelcomeMessage(ws: WebSocket) {
     ws.send(JSON.stringify({
       type: 'aiResponse',
       payload: {
-        message: "Meow! I'm Witty, your AI cat assistant. How can I help you today? Feel free to ask me anything!"
+        message: "Meow! *stretches and purrs* I'm Witty, your AI cat assistant! I was just napping in a sunbeam, but I'm all ears now. How can I help you today? Feel free to ask me anything about this purrfect portfolio! *playfully paws at your cursor*"
       }
     }));
   } catch (error) {

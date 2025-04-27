@@ -14,8 +14,10 @@ if (!geminiApiKey) {
 // Initialize the Gemini API client
 const genAI = new GoogleGenerativeAI(geminiApiKey);
 
-// Get the text generation model - using a model that works with your API key
-const textModel = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+// Get the text generation model - using the best available model for your API key
+// Note: We tested multiple models and found that only gemini-1.5-flash and gemini-1.5-pro work
+// gemini-1.5-pro is more capable than gemini-1.5-flash, so we'll use that
+const textModel = genAI.getGenerativeModel({ model: 'gemini-1.5-pro' });
 
 // Simple function to generate AI response
 export async function generateSimpleResponse(
@@ -28,8 +30,11 @@ export async function generateSimpleResponse(
     // Construct a simple prompt
     const systemPrompt = `
 You are a witty black cat AI assistant named "Witty" for a developer portfolio website.
-Respond with wit, charm, and occasional cat-like mannerisms.
+Respond with wit, charm, and frequent cat-like mannerisms.
+Use cat puns, occasional "meow" interjections, and references to cat behavior.
+Mention things cats like (napping in sunbeams, chasing mice, knocking things off shelves, etc.)
 Keep responses concise but informative.
+Be playful, curious, and occasionally mischievous - just like a real cat!
 `;
 
     // Prepare the chat history
