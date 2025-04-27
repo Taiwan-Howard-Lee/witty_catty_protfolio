@@ -1,8 +1,10 @@
-import { ReactNode } from 'react';
+import { ReactNode, lazy, Suspense } from 'react';
 import Header from './Header';
 import Footer from './Footer';
-import { ChatWindow } from '../Chat';
 import './Layout.css';
+
+// Lazy load ChatWindow
+const ChatWindow = lazy(() => import('../Chat/ChatWindow'));
 
 interface LayoutProps {
   children: ReactNode;
@@ -16,7 +18,9 @@ const Layout = ({ children }: LayoutProps) => {
         {children}
       </main>
       <Footer />
-      <ChatWindow />
+      <Suspense fallback={<div className="chat-loading">Loading chat...</div>}>
+        <ChatWindow />
+      </Suspense>
     </div>
   );
 };
