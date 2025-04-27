@@ -17,7 +17,7 @@ const PORT = process.env.PORT || 3001;
 // Middleware
 app.use(cors({
   origin: process.env.NODE_ENV === 'production'
-    ? ['https://witty-cat-portfolio.vercel.app']
+    ? ['https://witty-catty-protfolio-frontend.vercel.app', 'https://witty-cat-portfolio.vercel.app']
     : 'http://localhost:5173',
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true
